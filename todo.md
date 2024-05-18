@@ -1,13 +1,12 @@
 # Projekt-Todo-Liste
 
 ## 1. Historische Aktiendaten mit yfinance herunterladen
-- [ ] Installiere die `yfinance` Bibliothek
-- [ ] Lade historische Aktiendaten für ausgewählte Aktien herunter
-- [ ] Speichere die Daten in einem geeigneten Format (z.B. CSV)
+- [X] Installiere die `yfinance` Bibliothek
+- [X] Lade historische Aktiendaten für ausgewählte Aktien herunter
 
 ## 2. Daten mit SciKit-Learn bereinigen und vereinheitlichen
-- [ ] Installiere die `scikit-learn` Bibliothek
-- [ ] Importiere die Daten in ein pandas DataFrame
+- [X] Installiere die `scikit-learn` Bibliothek
+- [X] Importiere die Daten in ein pandas DataFrame
 - [ ] Führe notwendige Datenbereinigungsschritte durch (z.B. Entfernen von Nullwerten)
 - [ ] Vereinheitliche die Daten (z.B. Normalisierung/Standardisierung)
 - [ ] Speichere die bereinigten Daten ab
