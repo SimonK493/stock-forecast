@@ -1,4 +1,4 @@
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, QuantileTransformer
 from sklearn.impute import SimpleImputer
 import numpy as np
 import pandas as pd
@@ -13,10 +13,10 @@ import pandas as pd
     - Feature Engineering, z.B. Gleitende Durschnitte über mehrere Tage
 """
 def cleaner(data):
-    print(data)
     data = data.ffill()
-    print(data)
-    
+    data = data.replace([np.nan], 0)
+    print(data["AAPL"].head())
+
     
 if __name__ == "__main__":
     cleaner()
