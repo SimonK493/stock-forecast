@@ -14,8 +14,10 @@ import pandas as pd
 """
 def cleaner(data):
     data = data.ffill()
-    data = data.replace([np.nan], 0)
-    print(data["AAPL"].head())
+    print(data["AAPL"])
+    data_scaled = StandardScaler().fit_transform(data)
+    df_scaled = pd.DataFrame(data_scaled, index = data.index, columns = data.columns)
+    print(df_scaled["AAPL"])
 
     
 if __name__ == "__main__":
