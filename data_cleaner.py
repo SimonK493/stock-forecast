@@ -1,4 +1,6 @@
-import sklearn
+from sklearn.preprocessing import StandardScaler
+from sklearn.impute import SimpleImputer
+import numpy as np
 import pandas as pd
 """ 
  TODO: 
@@ -11,9 +13,10 @@ import pandas as pd
     - Feature Engineering, z.B. Gleitende Durschnitte über mehrere Tage
 """
 def cleaner(data):
-    df = data
-
-
-
+    print(data)
+    data = data.ffill()
+    print(data)
+    
+    
 if __name__ == "__main__":
     cleaner()
