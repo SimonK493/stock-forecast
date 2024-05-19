@@ -1,0 +1,1 @@
+tickers = ["AAPL", "MSFT", "GOOGL", "AMZN", "NVDA", "JPM", "GS", "BAC", "JNJ", "PFE", "MRK", "KO", "PEP", "PG", "GE", "BA", "CAT", "XOM", "CVX", "COP", "DUK", "NEE", "D"]
