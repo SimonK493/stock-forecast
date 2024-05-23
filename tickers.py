@@ -1,1 +1,2 @@
 tickers = ["AAPL", "MSFT", "GOOGL", "AMZN", "NVDA", "JPM", "GS", "BAC", "JNJ", "PFE", "MRK", "KO", "PEP", "PG", "GE", "BA", "CAT", "XOM", "CVX", "COP", "DUK", "NEE", "D"]
+features = ["Daily Return", "SMA 20", "SMA 50", "Volatility", "EMA 20", "RSI", "ROC", "MACD Line", "Signal Line", "OBV", "Daily Range", "Intraday Change"]
