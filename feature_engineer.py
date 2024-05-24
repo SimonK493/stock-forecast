@@ -12,7 +12,7 @@ class FinancialIndicators:
     
     def daily_return(self, ticker, df):
         for date in self.dates:
-            ...
+            print(self.data.loc[date, ticker]["Open"])
 
     def simple_moving_average(self):
         #ta.sma(,length = 20)
