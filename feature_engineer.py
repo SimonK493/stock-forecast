@@ -3,7 +3,6 @@ from tickers import tickers, features
 import pandas as pd
 import numpy as np
 from multiprocessing import Pool, cpu_count
-#import pandas_ta as ta
 
 
 class FinancialIndicators:
@@ -11,10 +10,10 @@ class FinancialIndicators:
         self.data = scaled_data
         self.dates = scaled_data.index.get_level_values("Date").unique().strftime("%Y-%m-%d")
     
-    def daily_return(self, ticker):
+    def daily_return(self, ticker, df):
         for date in self.dates:
             ...
-            
+
     def simple_moving_average(self):
         #ta.sma(,length = 20)
         #ta.sma(,length = 50)
@@ -62,7 +61,7 @@ class FinancialIndicators:
     def calculate_indicators(self):
         df = self.create_dataframe()
         for ticker in tickers:
-            self.daily_return(ticker)
+            self.daily_return(ticker, df)
         
 
 if __name__ == "__main__":

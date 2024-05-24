@@ -6,6 +6,7 @@ def data_downloader():
     # "Most interesting" shares in the sectors: Technology, Financials, Healthcare, Consumer Discretionary, Industrials, Energy, Utilities
     #tickers = ["AAPL"]
     data = yf.download(tickers, group_by = "ticker")
+    data.to_csv("my.csv")
     return data
 
 if __name__ == "__main__":
