@@ -8,8 +8,10 @@ import numpy as np
 class FinancialIndicators:
     def __init__(self, scaled_data):
         self.data = scaled_data
+        self.dates = scaled_data.index.get_level_values("Date").unique()
     
     def daily_return(self):
+
         #ta.percent_return()
         ...
     def simple_moving_average(self):
@@ -46,12 +48,13 @@ class FinancialIndicators:
         ...
 
     def create_dataframe(self):
-        dates = self.data.index.get_level_values("Date").unique()
+        dates = self.dates
         columns = pd.MultiIndex.from_product([tickers, features], names = ["Ticker", "Feature"])
 
         df = pd.DataFrame(index = dates, columns = columns)
 
         df[:] = np.nan
+        return df
 
 
     def calculate_indicators(self):
