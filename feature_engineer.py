@@ -11,7 +11,7 @@ class FinancialIndicators:
         self.dates = scaled_data.index.get_level_values("Date").unique().strftime("%Y-%m-%d")
     
 
-    def daily_return(self, ticker):
+    def daily_return(self, ticker: str):
         adj_close_t1 = None
         daily_returns = []
 
@@ -19,12 +19,13 @@ class FinancialIndicators:
             adj_close_t = self.data.loc[date, ticker]["Adj Close"]
 
             if not np.isnan(adj_close_t):
+
                 if adj_close_t1 is not None:
                     daily_return = (adj_close_t - adj_close_t1) / adj_close_t1
                     daily_returns.append(daily_return)
 
                 else:
-                    daily_returns.append(np.nan)
+                    daily_returns.append(adj_close_t)
 
                 adj_close_t1 = adj_close_t
 
@@ -32,13 +33,31 @@ class FinancialIndicators:
                 daily_returns.append(np.nan)
                 adj_close_t1 = None
         
-        df_daily_return = self.create_dataframe(ticker, daily_returns)
+        return self.create_dataframe(ticker, daily_returns)
+    
 
+    def simple_moving_average(self, ticker: str):
+        sma_20_values = []
+        sma_50_values = []
 
-    def simple_moving_average(self):
-        #ta.sma(,length = 20)
-        #ta.sma(,length = 50)
-        ...
+        for date in self.dates:
+            adj_close = self.data.loc[date, ticker]["Adj Close"]
+
+            adj_close_series = pd.Series(adj_close)
+
+            sma_20 = adj_close_series.rolling(window = 20, min_periods = 1).mean().iloc[-1]
+            sma_50 = adj_close_series.rolling(window = 50, min_periods = 1).mean().iloc[-1]
+
+            sma_20_values.append(sma_20)
+            sma_50_values.append(sma_50)
+        
+        df_sma20 = self.create_dataframe(ticker, sma_20_values)
+        df_sma50 = self.create_dataframe(ticker, sma_50_values)
+
+        df_sma20.to_csv("sma20.csv")
+        df_sma50.to_csv("sma50.csv")
+        
+        return df_sma20, df_sma50
     
     def volatility(self):
         
@@ -69,14 +88,16 @@ class FinancialIndicators:
         ...
 
 
-    def create_dataframe(self, ticker, data):
+    def create_dataframe(self, ticker: str, data: list):
         df = pd.DataFrame(data, index = self.dates, columns = [ticker])
         return df
     
 
     def calculate_indicators(self):
-        for ticker in tickers:
-            self.daily_return("ticker")
+        #for ticker in tickers:
+            #self.daily_return(ticker)
+        sma_20, sma_50 = self.simple_moving_average("AAPL")
+        self.volatility()
         
 
 if __name__ == "__main__":
