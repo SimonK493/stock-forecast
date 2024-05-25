@@ -40,29 +40,41 @@ class FinancialIndicators:
         sma_20_values = []
         sma_50_values = []
 
-        for date in self.dates:
-            adj_close = self.data.loc[date, ticker]["Adj Close"]
+        adj_close = self.data[ticker]["Adj Close"]
 
-            adj_close_series = pd.Series(adj_close)
+        sma_20 = adj_close.rolling(window = 20, min_periods = 1).mean()
+        sma_50 = adj_close.rolling(window = 50, min_periods = 1).mean()
 
-            sma_20 = adj_close_series.rolling(window = 20, min_periods = 1).mean().iloc[-1]
-            sma_50 = adj_close_series.rolling(window = 50, min_periods = 1).mean().iloc[-1]
-
-            sma_20_values.append(sma_20)
-            sma_50_values.append(sma_50)
+        sma_20_values.extend(sma_20)
+        sma_50_values.extend(sma_50)
         
         df_sma20 = self.create_dataframe(ticker, sma_20_values)
         df_sma50 = self.create_dataframe(ticker, sma_50_values)
-
-        df_sma20.to_csv("sma20.csv")
-        df_sma50.to_csv("sma50.csv")
-        
+    
         return df_sma20, df_sma50
     
-    def volatility(self):
-        
-        ...
     
+    def volatility(self, ticker: str):
+        volatility_20_values = []
+        volatility_50_values = []
+
+        adj_close = self.data[ticker]["Adj Close"]
+
+        sma_20 = adj_close.rolling(window = 20, min_periods = 1).mean().tolist()
+        sma_50 = adj_close.rolling(window = 50, min_periods = 1).mean().tolist()
+
+        for i in range(len(adj_close)):
+            volatility_20 = 0.05 * np.power(adj_close.iloc[i] - sma_20[i], 2)
+            volatility_50 = 0.05 * np.power(adj_close.iloc[i] - sma_50[i], 2)
+
+            volatility_20_values.append(np.sqrt(volatility_20))
+            volatility_50_values.append(np.sqrt(volatility_50))
+
+        df_volatility_20 = self.create_dataframe(ticker, volatility_20_values)
+        df_volatility_50 = self.create_dataframe(ticker, volatility_50_values)
+
+        return df_volatility_20, df_volatility_50
+
     def exponential_moving_average(self):
         ...
     
@@ -96,8 +108,7 @@ class FinancialIndicators:
     def calculate_indicators(self):
         #for ticker in tickers:
             #self.daily_return(ticker)
-        sma_20, sma_50 = self.simple_moving_average("AAPL")
-        self.volatility()
+        self.volatility("AAPL")
         
 
 if __name__ == "__main__":
