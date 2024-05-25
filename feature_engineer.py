@@ -10,9 +10,30 @@ class FinancialIndicators:
         self.data = scaled_data
         self.dates = scaled_data.index.get_level_values("Date").unique().strftime("%Y-%m-%d")
     
-    def daily_return(self, ticker, df):
+
+    def daily_return(self, ticker):
+        adj_close_t1 = None
+        daily_returns = []
+
         for date in self.dates:
-            print(self.data.loc[date, ticker]["Open"])
+            adj_close_t = self.data.loc[date, ticker]["Adj Close"]
+
+            if not np.isnan(adj_close_t):
+                if adj_close_t1 is not None:
+                    daily_return = (adj_close_t - adj_close_t1) / adj_close_t1
+                    daily_returns.append(daily_return)
+
+                else:
+                    daily_returns.append(np.nan)
+
+                adj_close_t1 = adj_close_t
+
+            else:
+                daily_returns.append(np.nan)
+                adj_close_t1 = None
+        
+        df_daily_return = self.create_dataframe(ticker, daily_returns)
+
 
     def simple_moving_average(self):
         #ta.sma(,length = 20)
@@ -47,21 +68,15 @@ class FinancialIndicators:
     def intraday_change(self):
         ...
 
-    def create_dataframe(self):
-        dates = self.dates
-        columns = pd.MultiIndex.from_product([tickers, features], names = ["Ticker", "Feature"])
 
-        df = pd.DataFrame(index = dates, columns = columns)
-
-        df[:] = 0
-        print("OK")
+    def create_dataframe(self, ticker, data):
+        df = pd.DataFrame(data, index = self.dates, columns = [ticker])
         return df
-
+    
 
     def calculate_indicators(self):
-        df = self.create_dataframe()
         for ticker in tickers:
-            self.daily_return(ticker, df)
+            self.daily_return("ticker")
         
 
 if __name__ == "__main__":
