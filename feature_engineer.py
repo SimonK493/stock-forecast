@@ -121,8 +121,6 @@ class FinancialIndicators:
         df_ema_200 = self.create_dataframe(ticker, ema_200_period)
 
         return df_ema_50, df_ema_200
-
-        ...
     
     def relative_strength_index(self):
         ...
