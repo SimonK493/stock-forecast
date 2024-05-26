@@ -75,7 +75,53 @@ class FinancialIndicators:
 
         return df_volatility_20, df_volatility_50
 
-    def exponential_moving_average(self):
+    def exponential_moving_average(self, ticker):
+        adj_close = self.data[ticker]["Adj Close"]
+
+        smoothing_factor_50 = 2 / 51
+        smoothing_factor_200 = 2 / 201
+
+        ema_50_period = []
+        ema_200_period = []
+
+        for i in range(len(adj_close)):
+            if not np.isnan(adj_close.iloc[i]): 
+                first_value = i
+                break
+
+        ema_50 = adj_close.iloc[first_value:first_value + 49].mean() if first_value + 49 <= len(adj_close) else None
+        print(ema_50)
+        ema_200 = adj_close.iloc[first_value:first_value + 199].mean() if first_value + 199 <= len(adj_close) else None
+
+
+        for i in range(len(adj_close)):
+
+            if i < first_value:
+                ema_50_period.append(np.nan)
+
+            elif i >= first_value + 50:
+                ema_50_period.append(smoothing_factor_50 * adj_close.iloc[i] + (1 - smoothing_factor_50) * ema_50)
+                ema_50 = ema_50_period[-1]
+
+            else:
+                ema_50_period.append(ema_50)
+
+            if i < first_value:
+                ema_200_period.append(np.nan)
+
+            elif i >= first_value + 200:
+                ema_200_period.append(smoothing_factor_200 * adj_close.iloc[i] + (1 - smoothing_factor_200) * ema_200)
+                ema_200 = ema_200_period[-1]
+        
+            else:
+                ema_200_period.append(ema_200)
+
+        #print(ema_50_period)
+        df_ema_50 = self.create_dataframe(ticker, ema_50_period)
+        df_ema_200 = self.create_dataframe(ticker, ema_200_period)
+
+        return df_ema_50, df_ema_200
+
         ...
     
     def relative_strength_index(self):
@@ -108,7 +154,7 @@ class FinancialIndicators:
     def calculate_indicators(self):
         #for ticker in tickers:
             #self.daily_return(ticker)
-        self.volatility("AAPL")
+        self.exponential_moving_average("AAPL")
         
 
 if __name__ == "__main__":
