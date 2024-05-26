@@ -122,9 +122,11 @@ class FinancialIndicators:
 
         return df_ema_50, df_ema_200
     
-    def relative_strength_index(self):
-        ...
-    
+    def relative_strength_index(self,ticker):
+        adj_close = self.data[ticker]["Adj Close"]
+        price_changes = adj_close.diff()
+
+        
     def rate_of_change(self):
         ...
     
@@ -152,7 +154,7 @@ class FinancialIndicators:
     def calculate_indicators(self):
         #for ticker in tickers:
             #self.daily_return(ticker)
-        self.exponential_moving_average("AAPL")
+        self.relative_strength_index("AAPL")
         
 
 if __name__ == "__main__":
