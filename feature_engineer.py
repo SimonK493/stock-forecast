@@ -239,11 +239,31 @@ class FinancialIndicators:
         return df_on_balance_volume
 
 
-    def daily_range(self):
-        ...
+    def daily_range(self, ticker: str):
 
-    def intraday_change(self):
-        ...
+        high_values = self.data[ticker]["High"]
+        low_values = self.data[ticker]["Low"]
+
+        daily_range_list = []
+
+        for i in range(len(high_values)):
+            daily_range_list.append(high_values.iloc[i] - low_values.iloc[i])
+        
+        df_daily_range = self.create_dataframe(ticker, daily_range_list)
+        
+
+    def intraday_change(self, ticker: str):
+        adj_close = self.data[ticker]["Adj Close"]
+        open_values = self.data[ticker]["Open"]
+
+        intraday_change_list = []
+
+        for i in range(len(adj_close)):
+            intraday_change_list.append((adj_close.iloc[i] - open_values.iloc[i]) / open_values.iloc[i])
+
+        df_intraday_change = self.create_dataframe(ticker, intraday_change_list)
+
+        return df_intraday_change
 
 
     def create_dataframe(self, ticker: str, data: list):
@@ -254,7 +274,7 @@ class FinancialIndicators:
     def calculate_indicators(self):
         #for ticker in tickers:
             #self.daily_return(ticker)
-        self.on_balance_volume("AAPL")
+        self.intraday_change("AAPL")
         
 
 if __name__ == "__main__":
