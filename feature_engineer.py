@@ -116,7 +116,6 @@ class FinancialIndicators:
             else:
                 ema_200_period.append(ema_200)
 
-        #print(ema_50_period)
         df_ema_50 = self.create_dataframe(ticker, ema_50_period)
         df_ema_200 = self.create_dataframe(ticker, ema_200_period)
 
@@ -126,7 +125,46 @@ class FinancialIndicators:
         adj_close = self.data[ticker]["Adj Close"]
         price_changes = adj_close.diff()
 
-        
+        avg_gain_list = []
+        avg_loss_list = []
+
+        relative_strength_index_list = []
+
+        for k in range(len(adj_close)):
+
+            if not np.isnan(price_changes.iloc[k]):
+                first_value = k 
+                break
+
+            else:
+                relative_strength_index_list.append(np.nan)
+                continue
+
+        for i in range(first_value, len(price_changes)):
+
+            if price_changes.iloc[i] > 0:
+                avg_gain_list.append(price_changes.iloc[i])
+                avg_loss_list.append(0)
+
+            else:
+                avg_gain_list.append(0)
+                avg_loss_list.append(abs(price_changes.iloc[i]))
+
+            avg_gain = sum(avg_gain_list) / len(avg_gain_list)
+            avg_loss = sum(avg_loss_list) / len(avg_loss_list)
+
+            if avg_loss == 0:
+                relative_strength = avg_gain
+
+            else:
+                relative_strength = avg_gain / avg_loss
+            
+            relative_strength_index_list.append(100 / (1 + relative_strength))
+
+        df_relative_strength_index = self.create_dataframe(ticker, relative_strength_index_list)
+
+        return df_relative_strength_index
+
     def rate_of_change(self):
         ...
     
