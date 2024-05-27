@@ -2,8 +2,6 @@ from tickers import tickers, features
 #libraries
 import pandas as pd
 import numpy as np
-from multiprocessing import Pool, cpu_count
-
 
 class FinancialIndicators:
 
@@ -35,8 +33,11 @@ class FinancialIndicators:
             else:
                 daily_returns.append(np.nan)
                 adj_close_t1 = None
+
+        df_daily_return = self.create_dataframe(ticker, daily_returns)
+
+        return df_daily_return
         
-        return self.create_dataframe(ticker, daily_returns)
     
 
     def simple_moving_average(self, ticker: str):
@@ -251,6 +252,7 @@ class FinancialIndicators:
         
         df_daily_range = self.create_dataframe(ticker, daily_range_list)
         
+        return df_daily_range
 
     def intraday_change(self, ticker: str):
         adj_close = self.data[ticker]["Adj Close"]
@@ -271,10 +273,28 @@ class FinancialIndicators:
         return df
     
 
-    def calculate_indicators(self):
-        #for ticker in tickers:
-            #self.daily_return(ticker)
-        self.intraday_change("AAPL")
+    def calculate_indicators(self, ticker):
+        daily_return = self.daily_return(ticker)
+        sma_20, sma_50 = self.simple_moving_average(ticker)
+        volatility_20, volatility_50 = self.volatility(ticker)
+        ema_50, ema_200 = self.exponential_moving_average(ticker)
+        relative_strength_index = self.relative_strength_index(ticker)
+        roc_20, roc_50 = self.rate_of_change(ticker)
+        obv = self.on_balance_volume(ticker)
+        daily_range = self.daily_range(ticker)
+        intraday_change = self.intraday_change(ticker)
+
+        return [daily_return, 
+                sma_20, sma_50, 
+                volatility_20, 
+                volatility_50, 
+                ema_50, ema_200, 
+                relative_strength_index,
+                roc_20, roc_50,
+                obv,
+                daily_range,
+                intraday_change]
+        
         
 
 if __name__ == "__main__":
