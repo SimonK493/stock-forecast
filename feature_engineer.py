@@ -235,7 +235,8 @@ class FinancialIndicators:
 
 
         df_on_balance_volume = self.create_dataframe(ticker, on_balance_volume_list)
-        df_on_balance_volume.to_csv("OBV.csv")
+        
+        return df_on_balance_volume
 
 
     def daily_range(self):
