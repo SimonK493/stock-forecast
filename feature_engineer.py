@@ -6,12 +6,15 @@ from multiprocessing import Pool, cpu_count
 
 
 class FinancialIndicators:
+
     def __init__(self, scaled_data):
+
         self.data = scaled_data
         self.dates = scaled_data.index.get_level_values("Date").unique().strftime("%Y-%m-%d")
     
 
     def daily_return(self, ticker: str):
+
         adj_close_t1 = None
         daily_returns = []
 
@@ -37,6 +40,7 @@ class FinancialIndicators:
     
 
     def simple_moving_average(self, ticker: str):
+
         sma_20_values = []
         sma_50_values = []
 
@@ -55,6 +59,7 @@ class FinancialIndicators:
     
     
     def volatility(self, ticker: str):
+
         volatility_20_values = []
         volatility_50_values = []
 
@@ -75,7 +80,8 @@ class FinancialIndicators:
 
         return df_volatility_20, df_volatility_50
 
-    def exponential_moving_average(self, ticker):
+    def exponential_moving_average(self, ticker: str):
+
         adj_close = self.data[ticker]["Adj Close"]
 
         smoothing_factor_50 = 2 / 51
@@ -90,7 +96,6 @@ class FinancialIndicators:
                 break
 
         ema_50 = adj_close.iloc[first_value:first_value + 49].mean() if first_value + 49 <= len(adj_close) else None
-        print(ema_50)
         ema_200 = adj_close.iloc[first_value:first_value + 199].mean() if first_value + 199 <= len(adj_close) else None
 
 
@@ -121,7 +126,8 @@ class FinancialIndicators:
 
         return df_ema_50, df_ema_200
     
-    def relative_strength_index(self,ticker):
+    def relative_strength_index(self,ticker: str):
+
         adj_close = self.data[ticker]["Adj Close"]
         price_changes = adj_close.diff()
 
@@ -165,9 +171,37 @@ class FinancialIndicators:
 
         return df_relative_strength_index
 
-    def rate_of_change(self):
-        ...
-    
+    def rate_of_change(self, ticker: str):
+
+        adj_close = self.data[ticker]["Adj Close"]
+
+        for j in range(len(adj_close)):
+            if not np.isnan(adj_close.iloc[j]):
+                first_value = j
+                break
+
+        roc_10 = []
+        roc_50 = []
+
+        for i in range(len(adj_close)):
+            if i >= 9 + first_value:
+                roc_10.append((adj_close.iloc[i] - adj_close.iloc[i - 9]) / adj_close.iloc[i - 9])
+
+                if i >= 49 + first_value:
+                    roc_50.append((adj_close.iloc[i] - adj_close.iloc[i - 49]) / adj_close.iloc[i - 49])
+                
+                else:
+                    roc_50.append(np.nan)
+            else:
+                roc_10.append(np.nan)
+                roc_50.append(np.nan)
+
+        df_roc_10 = self.create_dataframe(ticker, roc_10)
+        df_roc_50 = self.create_dataframe(ticker, roc_50)
+
+        df_roc_10.to_csv("ROC10.csv")
+
+
     def macd_line(self):
         ...
     
@@ -192,7 +226,7 @@ class FinancialIndicators:
     def calculate_indicators(self):
         #for ticker in tickers:
             #self.daily_return(ticker)
-        self.relative_strength_index("AAPL")
+        self.rate_of_change("AAPL")
         
 
 if __name__ == "__main__":
