@@ -199,17 +199,44 @@ class FinancialIndicators:
         df_roc_10 = self.create_dataframe(ticker, roc_10)
         df_roc_50 = self.create_dataframe(ticker, roc_50)
 
-        df_roc_10.to_csv("ROC10.csv")
+        return df_roc_10, df_roc_50
+    
+    def on_balance_volume(self, ticker: str):
+
+        adj_close = self.data[ticker]["Adj Close"]
+        volumes = self.data[ticker]["Volume"]
+
+        on_balance_volume_list = []
+
+        for j in range(len(adj_close)):
+
+            if not np.isnan(adj_close.iloc[j]):
+                first_value = j + 1
+                on_balance_volume_list.append(0)
+                break
+
+            else:
+                on_balance_volume_list.append(np.nan)
 
 
-    def macd_line(self):
-        ...
-    
-    def signal_line(self):
-        ...
-    
-    def on_balance_volume(self):
-        ...
+        for i in range(first_value, len(adj_close)):
+            closing_price = adj_close.iloc[i]
+            closing_price_yesterday = adj_close.iloc[i - 1]
+            volume = volumes.iloc[i]
+
+            if closing_price > closing_price_yesterday:
+                on_balance_volume_list.append(volume + on_balance_volume_list[-1])
+
+            elif closing_price < closing_price_yesterday:
+                on_balance_volume_list.append(on_balance_volume_list[-1] - volume)
+
+            else:
+                on_balance_volume_list.append(on_balance_volume_list[-1])
+
+
+        df_on_balance_volume = self.create_dataframe(ticker, on_balance_volume_list)
+        df_on_balance_volume.to_csv("OBV.csv")
+
 
     def daily_range(self):
         ...
@@ -226,7 +253,7 @@ class FinancialIndicators:
     def calculate_indicators(self):
         #for ticker in tickers:
             #self.daily_return(ticker)
-        self.rate_of_change("AAPL")
+        self.on_balance_volume("AAPL")
         
 
 if __name__ == "__main__":
