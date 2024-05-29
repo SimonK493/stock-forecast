@@ -16,10 +16,10 @@ def main():
     final_data = manager.dict()
     pool = mp.Pool(mp.cpu_count())
     for ticker in tickers:
-        pool.apply_async(fi.calculate_indicators, args = (ticker,), callback = collect_result)
+        pool.apply_async(fi.calculate_indicators, args = (ticker,), callback = lambda result: collect_result(result, final_data))
     
     pool.close()
-    pool.join
+    pool.join()
 
     final_data = dict(final_data)
     

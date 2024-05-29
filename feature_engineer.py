@@ -284,7 +284,7 @@ class FinancialIndicators:
         daily_range = self.daily_range(ticker)
         intraday_change = self.intraday_change(ticker)
 
-        return [daily_return, 
+        return ticker, [daily_return, 
                 sma_20, sma_50, 
                 volatility_20, 
                 volatility_50, 
