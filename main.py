@@ -12,6 +12,9 @@ def main():
     cleaned_data = data_cleaner.cleaner(data)
     fi = FinancialIndicators(cleaned_data)
 
+    os.system("cls")
+    print("Starting calculations")
+
     #Multiprocessing of the DF
     manager = mp.Manager()
     final_data = manager.dict()
@@ -26,7 +29,7 @@ def main():
     print("All calculations complete")
     final_data = dict(final_data)
     
-    print(final_data["AAPL"])
+    print(final_data["AAPL"][0])
     
 
 

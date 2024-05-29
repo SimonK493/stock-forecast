@@ -3,8 +3,8 @@ from tickers import tickers
 import yfinance as yf
 
 def data_downloader():
+    print("Download historical financial data:")
     # "Most interesting" shares in the sectors: Technology, Financials, Healthcare, Consumer Discretionary, Industrials, Energy, Utilities
-    #tickers = ["AAPL"]
     data = yf.download(tickers, group_by = "ticker")
     data.to_csv("my.csv")
     return data
