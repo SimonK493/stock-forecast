@@ -4,6 +4,7 @@ from tickers import tickers
 from results_collector import collect_result
 #libraries
 import multiprocessing as mp
+import os
 
 
 def main():
@@ -17,13 +18,15 @@ def main():
     pool = mp.Pool(mp.cpu_count())
     for ticker in tickers:
         pool.apply_async(fi.calculate_indicators, args = (ticker,), callback = lambda result: collect_result(result, final_data))
-    
+
     pool.close()
     pool.join()
 
+    os.system("cls")
+    print("All calculations complete")
     final_data = dict(final_data)
     
-    print(final_data)
+    print(final_data["AAPL"])
     
 
 
