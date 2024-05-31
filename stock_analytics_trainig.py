@@ -34,7 +34,7 @@ class ModelTrainer:
         
     def calculate_layers(self):
         inputs = []
-        for ticker in self.tickers:
+        for _ in self.tickers:
             inputs.append(len(self.features))
         
         hidden_layers = [layers.Dense(64, activation = "relu")(inp) for inp in inputs]
