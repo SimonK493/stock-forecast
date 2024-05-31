@@ -48,4 +48,6 @@ class ModelTrainer:
 
         
 
-
+    def train_model(self):
+        train_data, test_data = self.train_test_split()
+        input, output = self.calculate_layers()
