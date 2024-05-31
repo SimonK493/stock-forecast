@@ -2,6 +2,7 @@ import downloader, data_cleaner, feature_engineer
 from feature_engineer import FinancialIndicators
 from tickers import tickers
 from results_collector import collect_result
+from stock_analytics_trainig import ModelTrainer
 #libraries
 import multiprocessing as mp
 import os
@@ -29,7 +30,8 @@ def main():
     print("All calculations complete")
     final_data = dict(final_data)
     
-    print(final_data["AAPL"][0])
+    trainer = ModelTrainer(final_data)
+    trainer.train_test_split()
     
 
 
