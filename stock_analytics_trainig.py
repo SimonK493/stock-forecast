@@ -1,13 +1,17 @@
-
+from tickers import tickers, features
 #libraries
 import numpy as np
 import pandas as pd
+from tensorflow.python.keras import models
+from tensorflow.python.keras import layers
 
 
 class ModelTrainer:
 
     def __init__(self, data):
         self.data = data
+        self.features = features
+        self.tickers = tickers
 
     def train_test_split(self):
 
@@ -26,7 +30,22 @@ class ModelTrainer:
                 train_data[ticker].append(df[:train_size])
                 test_data[ticker].append(df[train_size:])
         
-        print(test_data)
+        return train_data, test_data
+        
+    def calculate_layers(self):
+        inputs = []
+        for ticker in self.tickers:
+            inputs.append(len(self.features))
+        
+        hidden_layers = [layers.Dense(64, activation = "relu")(inp) for inp in inputs]
+        concat = layers.Concatenate()(hidden_layers)
 
+        x = layers.Dense(128, activation = "relu")(concat)
+        x = layers.Dense(64, activation = "relu")(x)
+        output = layers.Dense(1, activation = "linear")(x)
+
+        return inputs, output
+
+        
 
 

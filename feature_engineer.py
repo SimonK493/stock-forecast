@@ -1,4 +1,4 @@
-from tickers import tickers, features
+
 #libraries
 import pandas as pd
 import numpy as np
