@@ -46,8 +46,11 @@ class ModelTrainer:
 
         return inputs, output
 
-        
+    def create_model(self, input, output):
+        model = models.Model(inputs = input, outputs = output)
+        model.compile(optimizer = "adam", loss = "mse")
 
     def train_model(self):
         train_data, test_data = self.train_test_split()
         input, output = self.calculate_layers()
+        self.create_model(input, output)

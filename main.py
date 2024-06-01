@@ -2,7 +2,8 @@ import downloader, data_cleaner, feature_engineer
 from feature_engineer import FinancialIndicators
 from tickers import tickers
 from results_collector import collect_result
-from stock_analytics_trainig import ModelTrainer
+#from stock_analytics_trainig import ModelTrainer
+from join_dataframes import join_dataframes
 #libraries
 import multiprocessing as mp
 import os
@@ -27,11 +28,14 @@ def main():
     pool.join()
 
     os.system("cls")
-    print("All calculations complete")
+    print("Joining Dataframes...")
     final_data = dict(final_data)
     
-    trainer = ModelTrainer(final_data)
-    trainer.train_test_split()
+    final_df = join_dataframes(final_data)
+
+
+    # trainer = ModelTrainer(final_data)
+    # trainer.train_test_split()
     
 
 
